@@ -47,7 +47,7 @@
     }
 
     function merge() {
-        text = ""
+        var text = ""
         for (var i = 0; i < $("#fileInput")[0].files.length; i++) {
             text += ($("#fileInput")[0].files[i].path) + ","
         }
@@ -60,7 +60,7 @@
                 mode: 'text',
                 args: [text]
             };
-        PythonShell.run('main.py', options, function (err, results) {
+        PythonShell.run('resources\\app\\main.py', options, function (err, results) {
             if (err) throw err;
             // $(".resultfile").empty();
             // jQuery(".resultfile").append(results + "<br>");
