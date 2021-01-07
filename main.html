@@ -58,6 +58,7 @@
             // document.write(text);
             let options = {
                 mode: 'text',
+                pythonPath: 'python',
                 args: [text]
             };
         PythonShell.run('resources\\app\\main.py', options, function (err, results) {
