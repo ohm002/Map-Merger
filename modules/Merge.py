@@ -138,67 +138,68 @@ def MergeAll(param):
 		if i == 0:
 			MergeTwo(osu, re.split(",", param)[1])
 		elif i >= 2:
+			filepathfull = re.split("\\\\",osu)
+			filepath = ""
+			for i in range(0, len(filepathfull)-1):
+				filepath += filepathfull[i] + "\\"
 			metadata = ParseAllBeatmapData(open(osu, encoding="utf-8").read().splitlines())
 			artist = re.split(":",metadata.metadata[2])[1]
 			title = re.split(":",metadata.metadata[0])[1]
 			mapper = re.split(":",metadata.metadata[4])[1]
-			MergeTwo(osu, f"{artist} - {title} ({mapper}) [Result].osu")
+			MergeTwo(osu, filepath + f"{artist} - {title} ({mapper}) [Result].osu")
 		i += 1
 
 def MergeTwo(osufile1, osufile2):
-	try:
-		osufile1file = open(osufile1, encoding="utf-8").read().splitlines()
-		filepathfull = re.split("\\\\",osufile1)
-		filepath = ""
-		for i in range(0, len(filepathfull)-1):
-			filepath += filepathfull[i] + "\\"
-		osufile2file = open(osufile2, encoding="utf-8").read().splitlines()
-		osufile1 = ParseAllBeatmapData(open(osufile1, encoding="utf-8").read().splitlines())
-		osufile2 = ParseAllBeatmapData(open(osufile2, encoding="utf-8").read().splitlines())
-		artist = re.split(":",osufile1.metadata[2])[1]
-		title = re.split(":",osufile1.metadata[0])[1]
-		mapper = re.split(":",osufile1.metadata[4])[1]
-		fullfilepath = filepath + f"{artist} - {title} ({mapper}) [Result].osu"
-		open(fullfilepath, 'a').close()
-		resultfile = open(fullfilepath, "w", encoding="utf-8")
-		towrite = ""
-		towrite += "osu file format v14\n" + "\n"
-		towrite += "[General]\n"
-		for line in osufile1.general:
+	osufile1file = open(osufile1, encoding="utf-8").read().splitlines()
+	filepathfull = re.split("\\\\",osufile1)
+	filepath = ""
+	for i in range(0, len(filepathfull)-1):
+		filepath += filepathfull[i] + "\\"
+	osufile2file = open(osufile2, encoding="utf-8").read().splitlines()
+	osufile1 = ParseAllBeatmapData(open(osufile1, encoding="utf-8").read().splitlines())
+	osufile2 = ParseAllBeatmapData(open(osufile2, encoding="utf-8").read().splitlines())
+	artist = re.split(":",osufile1.metadata[2])[1]
+	title = re.split(":",osufile1.metadata[0])[1]
+	mapper = re.split(":",osufile1.metadata[4])[1]
+	fullfilepath = filepath + f"{artist} - {title} ({mapper}) [Result].osu"
+	open(fullfilepath, 'a').close()
+	resultfile = open(fullfilepath, "w", encoding="utf-8")
+	towrite = ""
+	towrite += "osu file format v14\n" + "\n"
+	towrite += "[General]\n"
+	for line in osufile1.general:
+		towrite += line + "\n"
+	towrite += "\n[Editor]\n"
+	for line in osufile1.editor:
+		towrite += line + "\n"
+	towrite += "\n[Metadata]\n"
+	for line in osufile1.metadata:
+		if not line.startswith("Version"):
 			towrite += line + "\n"
-		towrite += "\n[Editor]\n"
-		for line in osufile1.editor:
-			towrite += line + "\n"
-		towrite += "\n[Metadata]\n"
-		for line in osufile1.metadata:
-			if not line.startswith("Version"):
-				towrite += line + "\n"
-			else:
-				towrite += "Version:Result" + "\n"
-		towrite += "\n[Difficulty]\n"
-		for line in osufile1.difficulty:
-			towrite += line + "\n"
-		towrite += "\n[Events]\n"
-		for line in osufile1.events:
-			towrite += line + "\n"
-		towrite += "\n[TimingPoints]\n"
-		alltimingpoints = []
-		for line in osufile1.timingpoints:
-			alltimingpoints.append(line)
-		for line2 in osufile2.timingpoints:
-			alltimingpoints.append(line2)
-		notduplicatedline = list(dict.fromkeys(alltimingpoints))
-		for line in notduplicatedline:
-			towrite += line + "\n"
-		# towrite += "\n[Colours]\n"
-		# for line in osufile1.colors:
-		# 	towrite += line + "\n"
-		towrite += "\n[HitObjects]\n"
-		for line in osufile1.hitobjects:
-			towrite += line + "\n"
-		for line in osufile2.hitobjects:
-			towrite += line + "\n"	
-		resultfile.write(towrite)
-		print(f"{artist} - {title} ({mapper}) [Result].osu")
-	except:
-		pass
+		else:
+			towrite += "Version:Result" + "\n"
+	towrite += "\n[Difficulty]\n"
+	for line in osufile1.difficulty:
+		towrite += line + "\n"
+	towrite += "\n[Events]\n"
+	for line in osufile1.events:
+		towrite += line + "\n"
+	towrite += "\n[TimingPoints]\n"
+	alltimingpoints = []
+	for line in osufile1.timingpoints:
+		alltimingpoints.append(line)
+	for line2 in osufile2.timingpoints:
+		alltimingpoints.append(line2)
+	notduplicatedline = list(dict.fromkeys(alltimingpoints))
+	for line in notduplicatedline:
+		towrite += line + "\n"
+	# towrite += "\n[Colours]\n"
+	# for line in osufile1.colors:
+	# 	towrite += line + "\n"
+	towrite += "\n[HitObjects]\n"
+	for line in osufile1.hitobjects:
+		towrite += line + "\n"
+	for line in osufile2.hitobjects:
+		towrite += line + "\n"	
+	resultfile.write(towrite)
+	print(f"{artist} - {title} ({mapper}) [Result].osu")

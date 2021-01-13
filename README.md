@@ -1,4 +1,4 @@
-![](https://i.imgur.com/YEI2GgV.png)
+![](https://i.imgur.com/HGwZo1Y.png)
 
 # Map-Merger
 
