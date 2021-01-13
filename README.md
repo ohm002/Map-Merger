@@ -12,3 +12,7 @@
 ### 0.1.0 - 2021-7-1
 * fixed 
 * galentori is the only tester atm lmao
+
+### 0.1.1 - 2021-13-1
+* fixed 
+* galentori is the only tester atm lmao
