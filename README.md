@@ -14,5 +14,5 @@
 * galentori is the only tester atm lmao
 
 ### 0.1.1 - 2021-13-1
-* fixed 
-* galentori is the only tester atm lmao
+* Now can marge 2 and more file completly
+* Fixed some bugs and errors
