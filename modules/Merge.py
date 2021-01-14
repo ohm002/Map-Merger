@@ -196,10 +196,20 @@ def MergeTwo(osufile1, osufile2):
 	# towrite += "\n[Colours]\n"
 	# for line in osufile1.colors:
 	# 	towrite += line + "\n"
+	towriteobject = ""
 	towrite += "\n[HitObjects]\n"
 	for line in osufile1.hitobjects:
-		towrite += line + "\n"
+		towriteobject += line + "\n"
 	for line in osufile2.hitobjects:
-		towrite += line + "\n"	
+		towriteobject += line + "\n"
+	# resultfile.write(towrite)
+	hitobjectlist = []
+	for line in re.split("\n", towriteobject):
+		hitobjectlist.append(line)
+	# test = open("test", "w", encoding="utf-8")
+	# test.write(str(hitobjectlist))
+	objecttowrite = ""
+	for i in (sorted((r for r in hitobjectlist if len(r) > 1),key=lambda r: int(re.split(",",r)[2]))):
+		objecttowrite += i + "\n"
+	towrite += objecttowrite
 	resultfile.write(towrite)
-	print(f"{artist} - {title} ({mapper}) [Result].osu")

@@ -16,3 +16,9 @@
 ### 0.1.1 - 2021-13-1
 * Now can marge 2 and more file completly
 * Fixed some bugs and errors
+
+### 0.2.0 - 2021-13-1
+* fixed hitobject timeline not sorted (resulted in not accurate song length appeared in song select menu)
+* add animations&ui
+* galentori and inversal are still the only fucking tester rn lol 
+* idk if its a good time now to post on forum
