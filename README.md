@@ -1,12 +1,15 @@
 ![](https://i.imgur.com/HGwZo1Y.png)
 
 # Map-Merger
+current version : 0.2.0
 
 > Some Stupid Program made by ohm002 (hi galentori btw)
 
 1. you need python installed
 2. that's it i guess
-
+## Screenshot
+![](https://i.imgur.com/lFT0hNL.png)
+current version : 0.2.0
 ## Changelog
 
 ### 0.1.0 - 2021-7-1
