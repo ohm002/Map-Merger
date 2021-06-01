@@ -1,17 +1,19 @@
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
+
     #particles-js canvas {
-        position: absolute;
-        height: 600px !important;
-        transform: translateY(-265px);
+        /* height: 600px !important; */
+        /* transform: translateY(-265px); */
     }
 
     :root {
-        width: 799px;
-        height: 600px;
-        display: grid;
-        place-items: center;
-        overflow: hidden;
+        font-family: 'Quicksand', sans-serif !important;
+        /* width: 799px;
+        height: 600px; */
+        /* display: grid; */
+        /* place-items: center; */
+        /* overflow: hidden; */
     }
 
     #form {
@@ -21,10 +23,13 @@
     }
 
     #filelist {
-        border: #1f1f1f solid;
+        border: #1f1f1f dashed 5px;
         border-width: 1px;
         padding: 20px;
         margin: 20px;
+        box-shadow: 5px 5px rgba(0, 0, 0, 0.7);
+        border-radius: 5px;
+        height: auto;
     }
 
     .bgimage {
@@ -32,42 +37,71 @@
         position: fixed;
         opacity: 0.7;
         height: 265px;
-        /* position: absolute; */
     }
 
-    .anotherform {
-        /* position: absolute; */
+    .btn {
+        background-color: #1f1f1f;
+        padding: 10px;
+        width: 100px;
+        font-family: 'Quicksand', sans-serif !important;
+        color: white;
+        border: none;
+        cursor: pointer;
     }
 
-    .form {
-        overflow: hidden;
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+
+    .osumap {
+        display: inline-block;
+        margin: 5px;
+        width: 100px;
+        height: 130px;
+        overflow-y: hidden;
+    }
+
+    .maposupic {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 10px;
+        box-shadow: 5px 5px rgba(0, 0, 0, 0.3);
+        object-fit: cover;
+        border-radius: 20px;
+        pointer-events: none;
+    }
+
+    .dragndrop {
+        opacity: 0.5;
+        font-size: 15pt;
     }
 </style>
-<link href="css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-<script src="js/bootstrap.bundle.min.js"
-    integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
-</script>
 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 </head>
 
 <body>
-        <div class="bgimage"></div>
-        <div class="form animate__animated animate__fadeIn" style="height:265px;">
+    <div class="bgimage"></div>
+    <div class="form" style="height:265px;">
         <div class="anotherform">
             <center id="form">
-                <label class="file">
-                    <input type="file" id="fileInput" multiple="multiple" size="60" onchange="print(this)" />
-                    <span class="file-custom"></span>
-                </label>
-                <div id="filelist"></div>▼<br><br>
-                <button type="submit" onclick="merge()" class="btn btn-outline-dark">Merge</button><br>
+                <span class="dragndrop">Drag & Drop</span>
+                <!-- <label class="file"> -->
+                <!-- </label> -->
+                <div id="filelist" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);"></div>
+                <button type="submit" onclick="merge()" class="btn">Merge Maps</button><br>
             </center>
         </div>
     </div>
-    <img src="bg.png" width=774px>
+    <!-- <img src="bg.png" width=774px> -->
 </body>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
@@ -76,28 +110,41 @@
             const {
                 PythonShell
             } = require('python-shell');
-            var path = (file.files[0].path);
-            let options = {
-                mode: 'text',
-                pythonPath: 'python',
-                args: [path]
-            };
-            PythonShell.run('resources/app/thumbnail.py', options, function (err, results) {
-                if (err) throw err;
-                console.log(results);
-                jQuery(".bgimage").empty();
-                jQuery(".bgimage").prepend(
-                    `<img src="${results[1]}" width=770px class="animate__animated animate__fadeIn">`
-                );
-                jQuery("#filelist").empty();
-                jQuery("#filelist").prepend(results[0]);
+            jQuery("#filelist").empty()
+            for (let i = 0; i < file.length; i++) {
+                var path = (file[i].getAsFile().path);
+                let options = {
+                    mode: 'text',
+                    pythonPath: 'python',
+                    args: [path]
+                };
+                PythonShell.run('thumbnail.py', options, function (err, results) {
+                    if (err) throw err;
+                    console.log(results);
+                    jQuery("#filelist").append(
+                        `<div class="osumap"><img src="${results[1]}" width=50px class=" maposupic"> <br> ${results[0]}</div>`
+                    );
 
-            });
+                });
+            }
         });
+    }
+
+    function dropHandler(ev) {
+        ev.preventDefault();
+        if (ev.dataTransfer.items[0].getAsFile().name.endsWith(".osu")) {
+            print(ev.dataTransfer.items)
+        }
+    }
+
+
+    function dragOverHandler(ev) {
+        ev.preventDefault();
     }
 
     function merge() {
         var text = ""
+        jQuery("#filelist").empty()
         for (var i = 0; i < $("#fileInput")[0].files.length; i++) {
             text += ($("#fileInput")[0].files[i].path) + ","
         }
@@ -111,10 +158,11 @@
             pythonPath: 'python',
             args: [text]
         };
-        PythonShell.run('resources/app/main.py', options, function (err, results) {
+        PythonShell.run('main.py', options, function (err, results) {
             if (err) throw err;
             // console.log(results);
         });
+
 
     }
 </script>

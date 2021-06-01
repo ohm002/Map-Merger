@@ -1,9 +1,10 @@
 const { app, BrowserWindow } = require('electron');
 
 app.whenReady().then(() => {
-    const myWindow = new BrowserWindow({
+    const w = new BrowserWindow({
         width: 800,
         height: 600,
+        titleBarStyle: 'hidden',
         webPreferences: {
             nodeIntegration: true
         },
@@ -13,5 +14,6 @@ app.whenReady().then(() => {
         transparent: true,
         icon: "icon.ico"
     });
-    myWindow.loadFile('main.html')
+    w.loadFile('main.html')
+    w.setMenu(null)
 })
