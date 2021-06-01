@@ -82,6 +82,10 @@
         opacity: 0.5;
         font-size: 15pt;
     }
+
+    .file {
+        display: none;
+    }
 </style>
 
 <head>
@@ -94,8 +98,7 @@
         <div class="anotherform">
             <center id="form">
                 <span class="dragndrop">Drag & Drop</span>
-                <!-- <label class="file"> -->
-                <!-- </label> -->
+                <div class="file"></div>
                 <div id="filelist" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);"></div>
                 <button type="submit" onclick="merge()" class="btn">Merge Maps</button><br>
             </center>
@@ -111,22 +114,30 @@
                 PythonShell
             } = require('python-shell');
             jQuery("#filelist").empty()
+            var textt = ""
             for (let i = 0; i < file.length; i++) {
                 var path = (file[i].getAsFile().path);
+                if (i == 0) {
+                    textt += (path + ', ');
+                } else if (i == file.length-1){
+                    textt += (path + '');
+                } else {
+                    textt += (path + ', ');
+                }
                 let options = {
                     mode: 'text',
                     pythonPath: 'python',
                     args: [path]
                 };
-                PythonShell.run('resources/app/thumbnail.py', options, function (err, results) {
+                PythonShell.run('thumbnail.py', options, function (err, results) {
                     if (err) throw err;
-                    console.log(results);
                     jQuery("#filelist").append(
                         `<div class="osumap"><img src="${results[1]}" width=50px class=" maposupic"> <br> ${results[0]}</div>`
                     );
 
                 });
             }
+            jQuery(".file").append(textt);
         });
     }
 
@@ -143,11 +154,12 @@
     }
 
     function merge() {
-        var text = ""
-        jQuery("#filelist").empty()
-        for (var i = 0; i < $("#fileInput")[0].files.length; i++) {
-            text += ($("#fileInput")[0].files[i].path) + ","
-        }
+        var text = jQuery(".file").text()
+        // jQuery("#filelist").empty()
+            console.log(text);
+        // for (var i = 0; i < $("#fileInput")[0].files.length; i++) {
+        //     text += ($("#fileInput")[0].files[i].getAsFile().path) + ","
+        // }
         const {
             PythonShell
         } = require('python-shell');
@@ -155,12 +167,12 @@
         // document.write(text);
         let options = {
             mode: 'text',
-            pythonPath: 'python',
+            pythonPath: '',
             args: [text]
         };
-        PythonShell.run('resources/app/main.py', options, function (err, results) {
+        console.log(text);
+        PythonShell.run('main.py', options, function (err, results) {
             if (err) throw err;
-            // console.log(results);
         });
 
 

@@ -15,5 +15,5 @@ app.whenReady().then(() => {
         icon: "icon.ico"
     });
     w.loadFile('main.html')
-    w.setMenu(null)
+    // w.setMenu(null)
 })

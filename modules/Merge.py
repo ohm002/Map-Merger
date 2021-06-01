@@ -134,9 +134,11 @@ def ParseAllBeatmapData(osufile):
 
 def MergeAll(param):
 	i = 0
-	for osu in re.split(",", param):
+	for osu in re.split(", ", param):
 		if i == 0:
-			MergeTwo(osu, re.split(",", param)[1])
+			# print("----------------------------")
+			osu2 = re.split(", ", param)[1]
+			MergeTwo(osu, osu2)
 		elif i >= 2:
 			filepathfull = re.split("\\\\",osu)
 			filepath = ""
