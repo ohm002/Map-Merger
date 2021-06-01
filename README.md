@@ -25,3 +25,6 @@ current version : 0.2.0
 * add animations&ui
 * galentori and inversal are still the only fucking tester rn lol 
 * idk if its a good time now to post on forum
+
+### 0.2.1 - 2021-1-6
+* bug fix

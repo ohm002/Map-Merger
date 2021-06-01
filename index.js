@@ -8,7 +8,7 @@ app.whenReady().then(() => {
             nodeIntegration: true
         },
         resizable: false,
-        title: "Hi Galentori",
+        title: "osu!Beatmap Merger",
         // titleBarStyle: "hidden",
         transparent: true,
         icon: "icon.ico"
