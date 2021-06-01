@@ -118,7 +118,7 @@
                     pythonPath: 'python',
                     args: [path]
                 };
-                PythonShell.run('thumbnail.py', options, function (err, results) {
+                PythonShell.run('resources/app/thumbnail.py', options, function (err, results) {
                     if (err) throw err;
                     console.log(results);
                     jQuery("#filelist").append(
@@ -158,7 +158,7 @@
             pythonPath: 'python',
             args: [text]
         };
-        PythonShell.run('main.py', options, function (err, results) {
+        PythonShell.run('resources/app/main.py', options, function (err, results) {
             if (err) throw err;
             // console.log(results);
         });
