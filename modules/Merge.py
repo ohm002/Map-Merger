@@ -134,11 +134,11 @@ def ParseAllBeatmapData(osufile):
 
 def MergeAll(param):
 	i = 0
-	for osu in re.split(", ", param):
+	for osu in re.split(",", param):
 		if i == 0:
 			# print("----------------------------")
-			osu2 = re.split(", ", param)[1]
-			MergeTwo(osu, osu2)
+			osu2 = re.split(",", param)[1]
+			MergeTwo(re.sub("[0-9] :", "",osu), re.sub("[0-9] :", "",osu2))
 		elif i >= 2:
 			filepathfull = re.split("\\\\",osu)
 			filepath = ""
@@ -148,7 +148,7 @@ def MergeAll(param):
 			artist = re.split(":",metadata.metadata[2])[1]
 			title = re.split(":",metadata.metadata[0])[1]
 			mapper = re.split(":",metadata.metadata[4])[1]
-			MergeTwo(osu, filepath + f"{artist} - {title} ({mapper}) [Result].osu")
+			MergeTwo(re.sub("[0-9] :", "",osu), re.sub("[0-9] :", "",filepath + f"{artist} - {title} ({mapper}) [Result].osu"))
 		i += 1
 
 def MergeTwo(osufile1, osufile2):

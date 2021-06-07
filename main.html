@@ -1,12 +1,7 @@
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<scrip src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></scrip>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
-
-    #particles-js canvas {
-        /* height: 600px !important; */
-        /* transform: translateY(-265px); */
-    }
-
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap');
     :root {
         font-family: 'Quicksand', sans-serif !important;
         /* width: 799px;
@@ -14,22 +9,24 @@
         /* display: grid; */
         /* place-items: center; */
         /* overflow: hidden; */
+        background-color: #1f1f1f;
     }
 
     #form {
         border-width: 1px;
         padding: 30px;
-        background-color: rgba(255, 255, 255, 0.7);
+        margin-top: 10px;
+        background-color: rgba(255, 255, 255, 1);
+        transition-duration: 1s;
     }
 
     #filelist {
-        border: #1f1f1f dashed 5px;
+        border: #1f1f1f solid 5px;
         border-width: 1px;
         padding: 20px;
         margin: 20px;
         box-shadow: 5px 5px rgba(0, 0, 0, 0.7);
-        border-radius: 5px;
-        height: auto;
+        /* border-radius: 5px; */
     }
 
     .bgimage {
@@ -39,6 +36,11 @@
         height: 265px;
     }
 
+    .btn:hover {
+        background-color: #474747;
+        transition-duration: 0.5s;
+    }
+
     .btn {
         background-color: #1f1f1f;
         padding: 10px;
@@ -46,12 +48,10 @@
         font-family: 'Quicksand', sans-serif !important;
         color: white;
         border: none;
+        transition-duration: 0.5s;
         cursor: pointer;
     }
 
-    input[type="file"] {
-        display: none;
-    }
 
     .custom-file-upload {
         border: 1px solid #ccc;
@@ -66,6 +66,8 @@
         width: 100px;
         height: 130px;
         overflow-y: hidden;
+        cursor: pointer;
+        transition-duration: 0.5s;
     }
 
     .maposupic {
@@ -83,8 +85,69 @@
         font-size: 15pt;
     }
 
-    .file {
+    .debug {
         display: none;
+    }
+
+    .importfilesdiv:hover {
+        background-color: #e9e9e9;
+        transition-duration: 0.5s;
+    }
+
+    .importfilesdiv {
+        border: #1f1f1f solid 1px;
+        display: inline-block;
+        padding: 6px 12px;
+        transition-duration: 0.5s;
+        cursor: pointer;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .removeosu:active {
+        border: none;
+    }
+
+    .remove {
+        font-family: 'Roboto', sans-serif;
+        opacity: 0;
+        color: rgba(255, 255, 255, 1);
+        text-shadow: 0 0 10px #000;
+        position: absolute;
+        transform: translate(-125%, 200%);
+        transition-duration: 0.5s;
+    }
+
+    .osumap:hover .remove {
+        opacity: 1;
+        transition-duration: 0.2s;
+        transform: translate(-125%, 250%);
+    }
+
+    .osumap:hover :not(.remove) {
+        filter: blur(1px);
+        transition-duration: 0.5s;
+    }
+
+    .debug {
+        border: #000 dashed 1px;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .switch {
+        padding: 10px;
+        /* background-color: white; */
+        /* color: white; */
+        font-size: small;
+    }
+
+    .switch input {
+        /* background: white; */
+        cursor: pointer;
+        border-radius: 0;
     }
 </style>
 
@@ -93,22 +156,95 @@
 </head>
 
 <body>
-    <div class="bgimage"></div>
-    <div class="form" style="height:265px;">
-        <div class="anotherform">
+    <div class="form animate__animated animate__fadeInDown" style="">
+            <div class="anotherform">
+            <span style="color: white; font-size: 50pt; font-weight: bold; font-family: 'Roboto', sans-serif;">Map
+                Merger</span>
             <center id="form">
+            <label class="switch"><input type="checkbox" id="checkdebug" onchange="debug();">Debug Mode</label>
+            <label class="importfilesdiv">
+                    <input type="file" id="fileimport" multiple="multiple" onchange="print2(this)">
+                    Select .osu files
+                </label><br><br>
                 <span class="dragndrop">Drag & Drop</span>
-                <div class="file"></div>
-                <div id="filelist" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);"></div>
+                <div class="debug">debug window uwu<br><br>
+                    <div class="file"></div>
+                    -----------------------------------<br><br>
+                    Processing:
+                    <div class="cmd"></div>
+                </div>
+                <div class="filelist">
+                    <div id="filelist" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);"></div>
+                </div>
                 <button type="submit" onclick="merge()" class="btn">Merge Maps</button><br>
             </center>
         </div>
     </div>
+    <!-- <a href="main2.html">pog</a> -->
     <!-- <img src="bg.png" width=774px> -->
 </body>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
+    function debug() {
+        var debugdiv = jQuery(".debug");
+        var checkbox = jQuery("#checkdebug");
+        if (checkbox.is(':checked') == true) {
+            jQuery(".debug").css("display", 'block');
+        } else {
+            jQuery(".debug").css("display", 'none');
+        }
+    }
+
+    function remove(div) {
+        var text = jQuery(".file").text().split(",");
+        jQuery(".file").empty();
+        var newtext = ""
+        for (let i = 0; i < text.length; i++) {
+            if (text[i].startsWith(`${div}`) == false) {
+                newtext += text[i] + ",";
+            }
+        }
+        jQuery(".file").append(newtext);
+        jQuery(`#${div}`).remove();
+        jQuery(".cmd").append("Removed object" + div + "<br>");
+    }
+
+    function print2(file) {
+        const {
+            PythonShell
+        } = require('python-shell');
+        var textt = ""
+        for (let i = 0; i < file.files.length; i++) {
+            var path = (file.files[i].path);
+            if (i == 0) {
+                textt += (`${i} :` + path + ',');
+            } else if (i == file.length - 1) {
+                textt += (`${i} :` + path + '');
+            } else {
+                textt += (`${i} :` + path + ',');
+            }
+            let options = {
+                mode: 'text',
+                pythonPath: 'python',
+                args: [path]
+            };
+            PythonShell.run('thumbnail.py', options, function (err, results) {
+                if (err) {
+                    jQuery(".cmd").append(err + "<br>");
+                    throw err;
+                }
+                var div = document.getElementById("filelist");
+                div.innerHTML += (
+                    `<div class="osumap animate__animated animate__fadeInDown" id="${i}" onclick="remove(${i});"><img src="${results[1]}" width=50px class="maposupic"><span class="remove">REMOVE</span> <br> ${results[0]}</div>`
+                );
+            });
+        }
+        jQuery(".file").append(textt);
+        jQuery(".cmd").append(`Added ${file.files.length} objects through buttons<br>`);
+    }
+
     function print(file) {
+        jQuery(".file").empty();
         jQuery(document).ready(function () {
             const {
                 PythonShell
@@ -116,13 +252,13 @@
             jQuery("#filelist").empty()
             var textt = ""
             for (let i = 0; i < file.length; i++) {
-                var path = (file[i].getAsFile().path);
+                var path = (file.files[i].path);
                 if (i == 0) {
-                    textt += (path + ', ');
-                } else if (i == file.length-1){
-                    textt += (path + '');
+                    textt += (`${i} :` + path + ',');
+                } else if (i == file.length - 1) {
+                    textt += (`${i} :` + path + '');
                 } else {
-                    textt += (path + ', ');
+                    textt += (`${i} :` + path + ',');
                 }
                 let options = {
                     mode: 'text',
@@ -130,14 +266,20 @@
                     args: [path]
                 };
                 PythonShell.run('thumbnail.py', options, function (err, results) {
-                    if (err) throw err;
-                    jQuery("#filelist").append(
-                        `<div class="osumap"><img src="${results[1]}" width=50px class=" maposupic"> <br> ${results[0]}</div>`
-                    );
+                    if (err) {
+                        jQuery(".cmd").append(err + "<br>");
+                        throw err;
+                    }
+                    jQuery(document).ready(function () {
+                        jQuery("#filelist").append(
+                            `<div class="osumap animate__animated animate__fadeInDown" id="${i}" onclick="remove(${i});"><img src="${results[1]}" width=50px class="maposupic"><span class="remove">REMOVE</span> <br> ${results[0]}</div>`
+                        );
+                    });
 
                 });
             }
             jQuery(".file").append(textt);
+            jQuery(".cmd").append(`Added ${file.length} objects through dragndrop<br>`);
         });
     }
 
@@ -156,7 +298,7 @@
     function merge() {
         var text = jQuery(".file").text()
         // jQuery("#filelist").empty()
-            console.log(text);
+        console.log(text);
         // for (var i = 0; i < $("#fileInput")[0].files.length; i++) {
         //     text += ($("#fileInput")[0].files[i].getAsFile().path) + ","
         // }
@@ -172,9 +314,11 @@
         };
         console.log(text);
         PythonShell.run('main.py', options, function (err, results) {
-            if (err) throw err;
+            if (err) {
+                jQuery(".cmd").append(err + "<br>");
+                throw err;
+            }
+            jQuery(".cmd").append(`Merged Beatmaps<br>`);
         });
-
-
     }
 </script>

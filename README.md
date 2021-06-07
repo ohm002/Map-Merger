@@ -37,3 +37,10 @@ An `electron` program written in `JavaScript` and `Python` to merge multiple .os
 * Added `Drag & Drop` Feature
 * Removed Menubar
 * Improved `UI Display and Font`
+
+### 0.4.0 - 2021-7-6
+* Improved `UI Display`
+* Added `Debug Mode`
+* Added `Buttons to import maps`
+* Specific .osu file is now could to be removed in-program
+
