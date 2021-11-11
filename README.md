@@ -11,7 +11,7 @@ An `electron` program written in `JavaScript` and `Python` to merge multiple .os
 
 ![](https://i.imgur.com/ExLExqJ.png)
 
-## Changelog | [Latest Release (0.3.0)](https://github.com/ohm002/Map-Merger/releases/latest)
+## Changelog | [Latest Release (0.4.1)](https://github.com/ohm002/Map-Merger/releases/latest)
 
 ### 0.1.0 - 2021-7-1
 
@@ -44,3 +44,6 @@ An `electron` program written in `JavaScript` and `Python` to merge multiple .os
 * Added `Buttons to import maps`
 * Specific .osu file is now could to be removed in-program
 
+### 0.4.1 - 2021-7-6
+
+* Bugs Fixed

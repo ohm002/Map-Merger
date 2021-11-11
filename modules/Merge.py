@@ -136,19 +136,21 @@ def MergeAll(param):
 	i = 0
 	for osu in re.split(",", param):
 		if i == 0:
-			# print("----------------------------")
-			osu2 = re.split(",", param)[1]
-			MergeTwo(re.sub("[0-9] :", "",osu), re.sub("[0-9] :", "",osu2))
+			if (osu != ""):
+				# print("----------------------------")
+				osu2 = re.split(",", param)[1]
+				MergeTwo(re.sub("[0-9] : ", "",osu), re.sub("[0-9] : ", "",osu2))
 		elif i >= 2:
-			filepathfull = re.split("\\\\",osu)
-			filepath = ""
-			for i in range(0, len(filepathfull)-1):
-				filepath += filepathfull[i] + "\\"
-			metadata = ParseAllBeatmapData(open(osu, encoding="utf-8").read().splitlines())
-			artist = re.split(":",metadata.metadata[2])[1]
-			title = re.split(":",metadata.metadata[0])[1]
-			mapper = re.split(":",metadata.metadata[4])[1]
-			MergeTwo(re.sub("[0-9] :", "",osu), re.sub("[0-9] :", "",filepath + f"{artist} - {title} ({mapper}) [Result].osu"))
+			if (osu != ""):
+				filepathfull = re.split("\\\\",osu)
+				filepath = ""
+				for i in range(0, len(filepathfull)-1):
+					filepath += filepathfull[i] + "\\"
+				metadata = ParseAllBeatmapData(open(re.sub("[0-9] : ", "",osu), encoding="utf-8").read().splitlines())
+				artist = re.split(":",metadata.metadata[2])[1]
+				title = re.split(":",metadata.metadata[0])[1]
+				mapper = re.split(":",metadata.metadata[4])[1]
+				MergeTwo(re.sub("[0-9] : ", "",osu), re.sub("[0-9] : ", "",filepath + f"{artist} - {title} ({mapper}) [Result].osu"))
 		i += 1
 
 def MergeTwo(osufile1, osufile2):

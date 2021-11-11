@@ -3,13 +3,13 @@ const { app, BrowserWindow } = require('electron');
 app.whenReady().then(() => {
     const w = new BrowserWindow({
         width: 800,
-        height: 600,
+        height: 500,
         titleBarStyle: 'hidden',
         webPreferences: {
             nodeIntegration: true
         },
         resizable: false,
-        title: "osu!Beatmap Merger",
+        title: "Map Merger",
         // titleBarStyle: "hidden",
         transparent: true,
         icon: "icon.ico"

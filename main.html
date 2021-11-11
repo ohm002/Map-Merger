@@ -1,4 +1,12 @@
-<scrip src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></scrip>
+<!-- ------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------ -->
+<!-- to make the code work in terminal, remove "resources/app" -------- -->
+<!-- ------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------ -->
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap');
@@ -149,6 +157,9 @@
         cursor: pointer;
         border-radius: 0;
     }
+    .file {
+        font-size: 1pt;
+    }
 </style>
 
 <head>
@@ -217,18 +228,18 @@
         for (let i = 0; i < file.files.length; i++) {
             var path = (file.files[i].path);
             if (i == 0) {
-                textt += (`${i} :` + path + ',');
+                textt += (`${i} : ` + path + ',');
             } else if (i == file.length - 1) {
-                textt += (`${i} :` + path + '');
+                textt += (`${i} : ` + path + '');
             } else {
-                textt += (`${i} :` + path + ',');
+                textt += (`${i} : ` + path + ',');
             }
             let options = {
                 mode: 'text',
                 pythonPath: 'python',
                 args: [path]
             };
-            PythonShell.run('thumbnail.py', options, function (err, results) {
+            PythonShell.run('resources/app/thumbnail.py', options, function (err, results) {
                 if (err) {
                     jQuery(".cmd").append(err + "<br>");
                     throw err;
@@ -252,20 +263,20 @@
             jQuery("#filelist").empty()
             var textt = ""
             for (let i = 0; i < file.length; i++) {
-                var path = (file.files[i].path);
+                var path = (file[i].getAsFile().path);
                 if (i == 0) {
-                    textt += (`${i} :` + path + ',');
+                    textt += (`${i} : ` + path + ',');
                 } else if (i == file.length - 1) {
-                    textt += (`${i} :` + path + '');
+                    textt += (`${i} : ` + path + '');
                 } else {
-                    textt += (`${i} :` + path + ',');
+                    textt += (`${i} : ` + path + ',');
                 }
                 let options = {
                     mode: 'text',
                     pythonPath: 'python',
                     args: [path]
                 };
-                PythonShell.run('thumbnail.py', options, function (err, results) {
+                PythonShell.run('resources/app/thumbnail.py', options, function (err, results) {
                     if (err) {
                         jQuery(".cmd").append(err + "<br>");
                         throw err;
@@ -313,7 +324,7 @@
             args: [text]
         };
         console.log(text);
-        PythonShell.run('main.py', options, function (err, results) {
+        PythonShell.run('resources/app/main.py', options, function (err, results) {
             if (err) {
                 jQuery(".cmd").append(err + "<br>");
                 throw err;
